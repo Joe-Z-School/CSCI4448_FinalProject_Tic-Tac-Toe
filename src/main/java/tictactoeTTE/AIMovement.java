@@ -1,5 +1,7 @@
 package tictactoeTTE;
 
+import tictactoeTTE.Players.Player;
+
 import java.util.LinkedList;
 import java.util.List;
 

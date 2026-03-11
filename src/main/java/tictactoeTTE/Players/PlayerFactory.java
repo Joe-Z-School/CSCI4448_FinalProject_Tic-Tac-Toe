@@ -1,4 +1,7 @@
-package tictactoeTTE;
+package tictactoeTTE.Players;
+
+import tictactoeTTE.AIMovement;
+import tictactoeTTE.HumanMovement;
 
 public class PlayerFactory {
 

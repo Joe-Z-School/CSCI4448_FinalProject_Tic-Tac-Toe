@@ -1,8 +1,11 @@
-package tictactoeTTE;
+package tictactoeTTE.Players;
+
+import tictactoeTTE.GameBoard;
+import tictactoeTTE.Movement;
 
 import java.util.LinkedList;
 
-public class Player {
+public abstract class Player {
     private String playerName;
     private String playerSymbol;
     private Movement movementStyle;

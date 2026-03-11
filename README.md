@@ -12,13 +12,28 @@ Final project for CSCI 4448 - Object-Oriented Analysis and Design with a Tic-Tac
     - Must have either a UI or some form of persisted state (ORM, file, database)
 
 ## Design Patterns Available:
-* Factory
+* Factory *
 * Builder
-* Observer
+* Observer *
 * Facade
 * Adapter
 * Template
-* Singleton
-* Strategy
+* Singleton *
+* Strategy *
 * Command
+
+
+## Game Description
+A Tic-Tac-Toe game but not in a normal sense. For my
+Tic-Tac-Toe game which can be played either solo against the PC, or as a 2
+player game where you can play another individual. As for what is different, I
+would like to make it so there are at maximum 3 of any “symbol” on the board at
+one given time. Instead of each player placing either the X or the O until one wins
+or until the board fills for a tie, as a player achieves 3 symbols on the board, once
+they place the 4th symbol, their previously placed first symbol is removed and
+that spot is now free. As the game progresses, previously placed symbols are
+removed until eventually a player connects 3 in a row for a win. In a sense, the
+game logic would be similar to a linked list with a maximum of 3 entities. As a 4th
+item enters the list, the “head” of the list is removed. This results in never being a
+tie situation.
 

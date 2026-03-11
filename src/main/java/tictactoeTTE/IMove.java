@@ -1,5 +1,5 @@
 package tictactoeTTE;
 
 public interface IMove {
-    int[] getNextMove();
+    int[] getNextMove(GameBoard board, Player player);
 }

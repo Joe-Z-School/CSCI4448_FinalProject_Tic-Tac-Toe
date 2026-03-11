@@ -1,8 +1,11 @@
 package tictactoeTTE;
 
-public class HumanMovement implements IMove{
+public class HumanMovement extends Movement {
 
-    public int[] getNextMove() {
+    public int[] getNextMove(GameBoard board, Player playerMoving) {
         return null;
+        /*
+        Get movement provided by player
+         */
     }
 }

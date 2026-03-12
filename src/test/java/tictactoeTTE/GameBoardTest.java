@@ -21,6 +21,7 @@ class GameBoardTest {
             }
         }
         int expectedCounter = 9;
+        gameBoard.displayBoard();
 
         assertEquals(expectedCounter, counter);
     }

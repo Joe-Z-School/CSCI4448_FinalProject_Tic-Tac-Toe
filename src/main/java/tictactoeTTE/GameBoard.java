@@ -159,5 +159,6 @@ public class GameBoard {
             }
             System.out.println();
         }
+        System.out.println();
     }
 }

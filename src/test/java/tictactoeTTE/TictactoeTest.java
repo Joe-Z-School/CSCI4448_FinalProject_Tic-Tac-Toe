@@ -21,5 +21,7 @@ public class TictactoeTest {
         game.play();
 
         Boolean gameIsOverResult = game.isOver();
+
+        assert(gameIsOverResult);
     }
 }

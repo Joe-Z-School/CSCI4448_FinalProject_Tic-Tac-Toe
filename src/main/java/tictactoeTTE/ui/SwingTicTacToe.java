@@ -99,7 +99,8 @@ public class SwingTicTacToe {
     }
 
     public static void main(String[] args)  {
-        Tictactoe game = new Tictactoe();
+        GameBoard board = new GameBoard();
+        Tictactoe game = new Tictactoe(board);
         new SwingTicTacToe(game).show();
     }
 

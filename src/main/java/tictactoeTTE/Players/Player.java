@@ -19,6 +19,9 @@ public abstract class Player {
         int[] nextMove = movementStyle.getNextMove(gameBoard, this);
 
         Boolean moveSuccessful = gameBoard.doMovement(nextMove[0], nextMove[1], this);
+        if (moveSuccessful){
+            System.out.println("Player " + playerName + " placed their symbol on the board!");
+        }
     }
 
     public String getSymbol(){ return playerSymbol; }

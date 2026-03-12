@@ -1,6 +1,8 @@
 package tictactoeTTE.ui;
 
 import tictactoeTTE.*;
+import tictactoeTTE.Players.Player;
+import tictactoeTTE.Players.PlayerFactory;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -99,8 +101,11 @@ public class SwingTicTacToe {
     }
 
     public static void main(String[] args)  {
+        PlayerFactory playerFactory = new PlayerFactory();
         GameBoard board = new GameBoard();
-        Tictactoe game = new Tictactoe(board);
+        Player playerOne = playerFactory.createHumanPlayer("Joe", "X");
+        Player playerTwo = playerFactory.createComputerPlayer("O");
+        Tictactoe game = new Tictactoe(board, playerOne, playerTwo);
         new SwingTicTacToe(game).show();
     }
 

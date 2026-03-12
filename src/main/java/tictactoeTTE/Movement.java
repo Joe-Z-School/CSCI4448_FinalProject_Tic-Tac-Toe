@@ -10,7 +10,16 @@ public abstract class Movement implements IMove{
 
     protected List<int[]> getAvailableMoves(GameBoard board){
         List<int[]> availableMoves = new ArrayList<>();
-        // Get spots available
+        String[][] layout = board.getBoardLayout();
+
+        for (int i = 0; i < layout.length; i++) {
+            for (int j = 0; j < layout[i].length; j++) {
+                if (layout[i][j] == null) {
+                    availableMoves.add(new int[]{i, j});
+                }
+            }
+        }
+
         return availableMoves;
     };
 

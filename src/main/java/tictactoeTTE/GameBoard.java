@@ -19,7 +19,6 @@ public class GameBoard {
     }
 
     public Boolean doMovement(int row, int column, Player player){
-        if (!isValidSpot(row, column)){ return false;}
 
         LinkedList<int[]> history = (player.getSymbol().equals("X")) ? player1History : player2History;
 
@@ -34,7 +33,10 @@ public class GameBoard {
         return true;
     }
 
-    private Boolean isValidSpot(int row, int column){
+    public Boolean isValidSpot(int row, int column){
+        if ( row < 0 || row >= MAX_ROWS || column < 0 || column >= MAX_COLUMNS){
+            return false;
+        }
         return boardLayout[row][column] == null;
     }
 

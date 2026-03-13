@@ -2,13 +2,17 @@ package tictactoeTTE;
 
 import tictactoeTTE.Players.Player;
 
-public class Tictactoe {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Tictactoe implements IGame{
 
     private Boolean gameIsOver = false;
     private GameBoard board;
     private Player playerOne;
     private Player playerTwo;
     private Player currentPlayer;
+    private List<IGameObserver> observers =  new ArrayList<>();
 
     public Tictactoe(GameBoard board, Player playerOne, Player playerTwo) {
         this.board = board;
@@ -38,5 +42,27 @@ public class Tictactoe {
     private void switchTurn() {
         currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;
     }
+
+    @Override
+    public void registerObserver(IGameObserver observer) {observers.add(observer);}
+
+    @Override
+    public void removeObserver(IGameObserver observer) {observers.remove(observer);}
+
+    @Override
+    public void sendMoveSignal(int row, int column, Player player){
+        for (IGameObserver observer : observers){
+            // send message of move
+        }
+    };
+
+    @Override
+    public void sendRemovalSignal(int row, int column){
+        for (IGameObserver observer : observers){
+            // send message of symbol removed
+        }
+    };
+
+
 
 }

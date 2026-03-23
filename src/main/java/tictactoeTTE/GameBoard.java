@@ -11,18 +11,20 @@ public class GameBoard {
     private String[][] boardLayout;
     private LinkedList<int[]> player1History;
     private LinkedList<int[]> player2History;
+    private int boardSize;
 
     public GameBoard() {
         boardLayout = new String[MAX_ROWS][MAX_COLUMNS];
         player1History = new LinkedList<>();
         player2History = new LinkedList<>();
+        boardSize = boardLayout.length;
     }
 
     public Boolean doMovement(int row, int column, Player player){
 
         LinkedList<int[]> history = (player.getSymbol().equals("X")) ? player1History : player2History;
 
-        if (history.size() == 3){
+        if (history.size() == boardSize){
             int[] oldestSymbol = history.poll();
             boardLayout[oldestSymbol[0]][oldestSymbol[1]] = null;
         }
@@ -62,21 +64,14 @@ public class GameBoard {
 
         return false;
     }
-    /*
-      0   1   2
-    0 * | * | *
-    1 * | * | *
-    2 * | * | *
-
-     */
 
     private Boolean checkRows(String playerSymbol){
         int correctSymbolCount = 0;
         for (int i = 0; i < MAX_ROWS; i++){
             for (int j = 0; j < MAX_COLUMNS; j++){
-                if (boardLayout[i][j].equals(playerSymbol)){
+                if (playerSymbol.equals(boardLayout[i][j])){
                     correctSymbolCount++;
-                    if (correctSymbolCount == 3){ return true;}
+                    if (correctSymbolCount == boardSize){ return true;}
                 }
             }
             correctSymbolCount = 0;
@@ -88,9 +83,9 @@ public class GameBoard {
         int correctSymbolCount = 0;
         for (int i = 0; i < MAX_COLUMNS; i++){
             for (int j = 0; j < MAX_ROWS; j++){
-                if (boardLayout[j][i].equals(playerSymbol)){
+                if (playerSymbol.equals(boardLayout[j][i])){
                     correctSymbolCount++;
-                    if (correctSymbolCount == 3){ return true;}
+                    if (correctSymbolCount == boardSize){ return true;}
                 }
             }
             correctSymbolCount = 0;
@@ -100,26 +95,24 @@ public class GameBoard {
 
     private Boolean checkDiagLtoR(String playerSymbol){
         int correctSymbolCount = 0;
-        int boardSize = boardLayout.length;
 
         for (int i = 0; i < boardSize; i++){
-            if (boardLayout[i][i].equals(playerSymbol)){
+            if (playerSymbol.equals(boardLayout[i][i])){
                 correctSymbolCount++;
             }
         }
-        return correctSymbolCount == 3;
+        return correctSymbolCount == boardSize;
     }
 
     private Boolean checkDiagRtoL(String playerSymbol){
         int correctSymbolCount = 0;
-        int boardSize = boardLayout.length;
 
         for (int i = 0; i < boardSize; i++){
-            if (boardLayout[i][boardSize-1-i].equals(playerSymbol)){
+            if (playerSymbol.equals(boardLayout[i][boardSize-1-i])){
                 correctSymbolCount++;
             }
         }
-        return correctSymbolCount == 3;
+        return correctSymbolCount == boardSize;
     }
 
     public void displayBoard(){

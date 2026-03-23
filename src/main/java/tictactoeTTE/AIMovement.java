@@ -5,6 +5,7 @@ import tictactoeTTE.Players.Player;
 public class AIMovement extends Movement {
 
 
+    // Goal is to check for winning spot first, then check to block, lastly default to first available spot
     public int[] getNextMove(GameBoard board, Player playerMoving) {
         String mySymbol = playerMoving.getSymbol();
         String opponentSymbol = mySymbol.equals("X") ? "O" : "X";
@@ -22,7 +23,6 @@ public class AIMovement extends Movement {
         return getAvailableMoves(board).getFirst();
     }
 
-    // Goal is to check for winning spot first, then check to block, lastly default to first available spot
     private int[] findMove(GameBoard board, String symbol) {
         String[][] layoutOfBoard = board.getBoardLayout();
         int boardSize = layoutOfBoard.length;

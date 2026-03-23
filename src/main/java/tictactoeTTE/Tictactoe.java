@@ -26,9 +26,10 @@ public class Tictactoe implements IGame{
             board.displayBoard();
             currentPlayer.takeTurn(board);
             if (board.checkIfWinner(currentPlayer)) {
+                board.displayBoard();
                 gameIsOver = true;
                 System.out.println("GAME OVER");
-                System.out.println("Winner: " + currentPlayer);
+                System.out.println("Winner: " + currentPlayer.getPlayerName());
             } else {
                 switchTurn();
             }
@@ -36,8 +37,6 @@ public class Tictactoe implements IGame{
     }
 
     public Boolean isOver(){ return gameIsOver; }
-
-    public Player getCurrentPlayer(){ return currentPlayer; }
 
     private void switchTurn() {
         currentPlayer = currentPlayer.equals(playerOne) ? playerTwo : playerOne;

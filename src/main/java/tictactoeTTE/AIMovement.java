@@ -2,9 +2,6 @@ package tictactoeTTE;
 
 import tictactoeTTE.Players.Player;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class AIMovement extends Movement {
 
 
@@ -25,6 +22,7 @@ public class AIMovement extends Movement {
         return getAvailableMoves(board).getFirst();
     }
 
+    // Goal is to check for winning spot first, then check to block, lastly default to first available spot
     private int[] findMove(GameBoard board, String symbol) {
         String[][] layoutOfBoard = board.getBoardLayout();
         int boardSize = layoutOfBoard.length;
@@ -72,27 +70,27 @@ public class AIMovement extends Movement {
     }
 
     private int[] checkDiagLtoR(int boardSize, String[][] layout, String symbol, int targetCounter) {  // 3. Check Main Diagonal (Top-Left to Bottom-Right)
-        int diag1Count = 0;
-        int diag1EmptyIndex = -1;
+        int diagLtoRCount = 0;
+        int diagLtoREmptyIndex = -1;
         for (int i = 0; i < boardSize; i++) {
-            if (symbol.equals(layout[i][i])) diag1Count++;
-            else if (layout[i][i] == null) diag1EmptyIndex = i;
+            if (symbol.equals(layout[i][i])) diagLtoRCount++;
+            else if (layout[i][i] == null) diagLtoREmptyIndex = i;
         }
-        if (diag1Count == targetCounter && diag1EmptyIndex != -1) return new int[]{diag1EmptyIndex, diag1EmptyIndex};
+        if (diagLtoRCount == targetCounter && diagLtoREmptyIndex != -1) return new int[]{diagLtoREmptyIndex, diagLtoREmptyIndex};
 
         return null;
     }
 
     private int[] checkDiagRtoL(int boardSize, String[][] layout, String symbol, int targetCounter) {    // 4. Check Anti-Diagonal (Top-Right to Bottom-Left)
-        int diag2Count = 0;
-        int diag2EmptyIndex = -1;
+        int diagRtoLCount = 0;
+        int diagRtoLEmptyIndex = -1;
         for (int i = 0; i < boardSize; i++) {
             int col = boardSize - 1 - i;
-            if (symbol.equals(layout[i][col])) diag2Count++;
-            else if (layout[i][col] == null) diag2EmptyIndex = i;
+            if (symbol.equals(layout[i][col])) diagRtoLCount++;
+            else if (layout[i][col] == null) diagRtoLEmptyIndex = i;
         }
-        if (diag2Count == targetCounter && diag2EmptyIndex != -1)
-            return new int[]{diag2EmptyIndex, boardSize - 1 - diag2EmptyIndex};
+        if (diagRtoLCount == targetCounter && diagRtoLEmptyIndex != -1)
+            return new int[]{diagRtoLEmptyIndex, boardSize - 1 - diagRtoLEmptyIndex};
 
         return null;
     }

@@ -1,7 +1,7 @@
 package tictactoeTTE.Players;
 
-import tictactoeTTE.AIMovement;
-import tictactoeTTE.HumanMovement;
+import tictactoeTTE.Movement.AIMovement;
+import tictactoeTTE.Movement.HumanMovement;
 
 public class PlayerFactory {
     private final String COMPUTER_DEFAULT_NAME = "Computer";

@@ -1,7 +1,7 @@
 package tictactoeTTE.Players;
 
 import tictactoeTTE.GameBoard;
-import tictactoeTTE.Movement;
+import tictactoeTTE.Movement.Movement;
 
 public abstract class Player {
     private String playerName;

@@ -1,9 +1,7 @@
-package tictactoeTTE;
+package tictactoeTTE.Movement;
 
+import tictactoeTTE.GameBoard;
 import tictactoeTTE.Players.Player;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class AIMovement extends Movement {
 

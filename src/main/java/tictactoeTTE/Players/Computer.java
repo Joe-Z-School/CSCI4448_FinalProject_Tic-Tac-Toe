@@ -1,6 +1,6 @@
 package tictactoeTTE.Players;
 
-import tictactoeTTE.Movement;
+import tictactoeTTE.Movement.Movement;
 
 public class Computer extends Player {
 

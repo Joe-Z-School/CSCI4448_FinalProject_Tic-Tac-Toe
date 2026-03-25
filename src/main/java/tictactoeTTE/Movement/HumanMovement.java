@@ -1,5 +1,6 @@
-package tictactoeTTE;
+package tictactoeTTE.Movement;
 
+import tictactoeTTE.GameBoard;
 import tictactoeTTE.Players.Player;
 
 public class HumanMovement extends Movement {

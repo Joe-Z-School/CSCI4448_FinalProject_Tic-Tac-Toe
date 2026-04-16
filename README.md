@@ -11,8 +11,8 @@ Final project for CSCI 4448 - Object-Oriented Analysis and Design with a Tic-Tac
     - The observer pattern will be utilized to update the visual board upon each placement of a symbol by a player.
 * Strategy Pattern:
     - The strategy pattern will be used for the different types of symbol placement available such as if the symbol will be placed by a human player, or if the symbols will be placed using an algorithm by the computer player.
-* 4th Pattern:
-    - MVC
+* MVC Pattern:
+    - The MVC pattern will be used to organize the game and help handle the game flow between the input gathered from the user to be updated onto the UI.
 
 
 ## The project should:
@@ -35,6 +35,10 @@ Final project for CSCI 4448 - Object-Oriented Analysis and Design with a Tic-Tac
 * Singleton
 * Strategy
 * Command
+* Decorator
+* Composite
+* Iterator
+* MVC
 
 
 ## Game Description
@@ -50,4 +54,15 @@ removed until eventually a player connects 3 in a row for a win. In a sense, the
 game logic would be similar to a linked list with a maximum of 3 entities. As a 4th
 item enters the list, the “head” of the list is removed. This results in never being a
 tie situation.
+
+
+### Notes
+* Observer Pattern:
+  - Subject = Tictactoe implementing IGame w/ list of observers
+  - Notify = After each move, Tictactoe should call observer.sendMoveSignal(x, y, symbol) and every 4th symbol should call observer.sendRemoveSymbol(x,y)
+  - Observer = SwingTicTacToe implementing IGameObserver and place/remove symbols when signals received. 
+* MVC layout:
+  - Model = GameBoard and Tictactoe
+  - View = SwingTicTacToe
+  - Controller = GameController
 

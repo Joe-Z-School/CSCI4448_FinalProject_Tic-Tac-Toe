@@ -1,9 +1,11 @@
 package tictactoeTTE;
 
+import tictactoeTTE.Movement.MoveResult;
 import tictactoeTTE.Players.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.Timer;
 
 public class Tictactoe implements IGame{
 
@@ -21,17 +23,38 @@ public class Tictactoe implements IGame{
         this.currentPlayer = playerOne; // Default to player one starting
     }
 
-    public void play() {
-        while (!gameIsOver) {
-            board.displayBoard();
-            currentPlayer.takeTurn(board);
-            if (board.checkIfWinner(currentPlayer)) {
-                board.displayBoard();
-                gameIsOver = true;
-                System.out.println("GAME OVER");
-                System.out.println("Winner: " + currentPlayer.getPlayerName());
-            } else {
-                switchTurn();
+    public void handleMove(int row, int col) {
+        if (gameIsOver) return;
+
+        if (!board.isValidSpot(row, col)) {
+            return;
+        }
+
+        MoveResult resultOfMove = board.doMovement(row, col, currentPlayer);
+
+        if (resultOfMove.wasSymbolRemoved()){
+            sendRemovalSignal(resultOfMove.getRemovedRow(),  resultOfMove.getRemovedColumn());
+        }
+
+        sendMoveSignal(row, col, currentPlayer);
+
+        if (board.checkIfWinner(currentPlayer)){
+            gameIsOver = true;
+            sendGameOverSignal(currentPlayer);
+        }
+        else {
+            switchTurn();
+
+            if(currentPlayer.isComputer()){
+                int computerMoveDisplayDelay = 1500;
+
+                Timer computerDelayTimer = new Timer(computerMoveDisplayDelay, action -> {
+                    int[] computerMove = currentPlayer.getMove(board);
+                    handleMove(computerMove[0], computerMove[1]);
+                });
+
+                computerDelayTimer.setRepeats(false);
+                computerDelayTimer.start();
             }
         }
     }
@@ -51,17 +74,21 @@ public class Tictactoe implements IGame{
     @Override
     public void sendMoveSignal(int row, int column, Player player){
         for (IGameObserver observer : observers){
-            // send message of move
+            observer.moveMade(row, column, player.getSymbol());
         }
-    };
+    }
 
     @Override
     public void sendRemovalSignal(int row, int column){
         for (IGameObserver observer : observers){
-            // send message of symbol removed
+            observer.symbolRemoved(row, column);
         }
-    };
+    }
 
-
-
+    @Override
+    public void sendGameOverSignal(Player winningPlayer){
+        for (IGameObserver observer : observers){
+            observer.gameOver(winningPlayer);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package tictactoeTTE.Players;
 
 import tictactoeTTE.GameBoard;
+import tictactoeTTE.Movement.MoveResult;
 import tictactoeTTE.Movement.Movement;
 
 public abstract class Player {
@@ -15,15 +16,14 @@ public abstract class Player {
         this.movementStyle = movementStyle;
     }
 
-    public void takeTurn(GameBoard gameBoard){
-        int[] nextMove = movementStyle.getNextMove(gameBoard, this);
-
-        Boolean moveSuccessful = gameBoard.doMovement(nextMove[0], nextMove[1], this);
-        if (moveSuccessful){
-            System.out.println("Player " + playerName + " placed their symbol on the board!");
-        }
+    public int[] getMove(GameBoard gameBoard){
+        return movementStyle.getNextMove(gameBoard, this);
     }
 
     public String getSymbol(){ return playerSymbol; }
     public String getPlayerName(){ return playerName; }
+
+    public boolean isHuman(){ return false; }
+
+    public boolean isComputer(){return false; }
 }

@@ -7,5 +7,6 @@ public interface IGame {
     void removeObserver(IGameObserver observer);
     void sendMoveSignal(int row, int column, Player player);
     void sendRemovalSignal(int row, int column);
+    void sendGameOverSignal(Player player);
 
 }

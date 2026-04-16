@@ -1,5 +1,6 @@
 package tictactoeTTE;
 
+import tictactoeTTE.Movement.MoveResult;
 import tictactoeTTE.Players.Player;
 
 import java.util.LinkedList;
@@ -20,19 +21,27 @@ public class GameBoard {
         boardSize = boardLayout.length;
     }
 
-    public Boolean doMovement(int row, int column, Player player){
+    public MoveResult doMovement(int row, int column, Player player){
 
         LinkedList<int[]> history = (player.getSymbol().equals("X")) ? player1History : player2History;
+
+        boolean removedSymbol = false;
+        int removedRow = -1;
+        int removedColumn = -1;
 
         if (history.size() == boardSize){
             int[] oldestSymbol = history.poll();
             boardLayout[oldestSymbol[0]][oldestSymbol[1]] = null;
+
+            removedSymbol = true;
+            removedRow = oldestSymbol[0];
+            removedColumn = oldestSymbol[1];
         }
 
         boardLayout[row][column] = player.getSymbol();
         history.add(new int[]{row, column});
 
-        return true;
+        return new MoveResult(true, removedSymbol, removedRow, removedColumn);
     }
 
     public Boolean isValidSpot(int row, int column){

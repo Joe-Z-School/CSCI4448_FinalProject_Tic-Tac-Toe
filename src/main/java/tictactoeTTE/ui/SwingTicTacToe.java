@@ -16,24 +16,44 @@ import java.util.Map;
 import java.util.Optional;
 
 
-public class SwingTicTacToe {
+public class SwingTicTacToe implements IGameObserver{
     public static final Color BACKGROUND_COLOR = new Color(10, 10, 10);
     public static final Color COLOR_BORDER_LIGHT_GRAY = new Color(200, 200, 200);
     public static final int CELL_DIMENSION = 90;
+
+    private final GameBoardCell[][] cells;
 
     private final Tictactoe tictactoe;
 
     private final JFrame frame = new JFrame("Tic-Tac-Toe");
     private final JPanel gridPanel = new JPanel();
 
-    private final JLabel[][] cells;
+    //private final JLabel[][] cells;
 
     public SwingTicTacToe(Tictactoe game) {
         this.tictactoe = game;
-        this.cells = new JLabel[3][3];
+        this.cells = new GameBoardCell[3][3];
+
+        this.tictactoe.registerObserver(this);
 
         buildUi(3, 3);
         redrawFromModel();
+    }
+
+    @Override
+    public void moveMade(int row, int column, String symbol){
+        cells[row][column].setSymbol(symbol);
+        cells[row][column].setForeground(symbol.equals("X") ? Color.CYAN : Color.ORANGE);
+    }
+
+    @Override
+    public void symbolRemoved(int row, int column){
+        cells[row][column].setSymbol("");
+    }
+
+    @Override
+    public void gameOver(Player winner){
+        JOptionPane.showMessageDialog(frame, "Winner: " + winner.getPlayerName());
     }
 
     private void buildUi(int rows, int cols) {
@@ -53,11 +73,22 @@ public class SwingTicTacToe {
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
-                JLabel cell = new JLabel("", SwingConstants.CENTER);
+                final int rowSelected = row;
+                final int columnSelected = col;
+
+                GameBoardCell cell = new GameBoardCell();
                 cell.setOpaque(true);
                 cell.setPreferredSize(new Dimension(CELL_DIMENSION, CELL_DIMENSION));
                 cell.setBorder(new LineBorder(COLOR_BORDER_LIGHT_GRAY, 2));
                 cell.setBackground(BACKGROUND_COLOR);
+
+                cell.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        tictactoe.handleMove(rowSelected, columnSelected);
+                    }
+                });
+
                 cells[row][col] = cell;
                 gridPanel.add(cell);
             }
@@ -85,10 +116,10 @@ public class SwingTicTacToe {
     }
 
     private void paintEmptyGrid() {
-        for (JLabel[] jLabels : cells) {
+        for (GameBoardCell[] GameBoardCell : cells) {
             for (int c = 0; c < cells[0].length; c++) {
-                JLabel cell = jLabels[c];
-                cell.setText("");
+                GameBoardCell cell = GameBoardCell[c];
+                cell.setSymbol("");
                 cell.setBackground(BACKGROUND_COLOR);
                 cell.setForeground(Color.BLACK);
                 cell.setBorder(new LineBorder(COLOR_BORDER_LIGHT_GRAY, 2));

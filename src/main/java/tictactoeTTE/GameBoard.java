@@ -7,15 +7,17 @@ import java.util.LinkedList;
 
 public class GameBoard {
 
-    private int MAX_ROWS = 3;
-    private int MAX_COLUMNS = 3;
+    private int MAX_ROWS;
+    private int MAX_COLUMNS;
     private String[][] boardLayout;
     private LinkedList<int[]> player1History;
     private LinkedList<int[]> player2History;
     private int boardSize;
 
-    public GameBoard() {
-        boardLayout = new String[MAX_ROWS][MAX_COLUMNS];
+    public GameBoard(int size) {
+        boardLayout = new String[size][size];
+        this.MAX_ROWS = size;
+        this.MAX_COLUMNS = size;
         player1History = new LinkedList<>();
         player2History = new LinkedList<>();
         boardSize = boardLayout.length;

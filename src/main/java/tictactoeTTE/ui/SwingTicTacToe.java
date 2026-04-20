@@ -30,20 +30,20 @@ public class SwingTicTacToe implements IGameObserver{
 
     //private final JLabel[][] cells;
 
-    public SwingTicTacToe(Tictactoe game) {
+    public SwingTicTacToe(Tictactoe game, int size) {
         this.tictactoe = game;
-        this.cells = new GameBoardCell[3][3];
+        this.cells = new GameBoardCell[size][size];
 
         this.tictactoe.registerObserver(this);
 
-        buildUi(3, 3);
+        buildUi(size, size);
         redrawFromModel();
     }
 
     @Override
     public void moveMade(int row, int column, String symbol){
         cells[row][column].setSymbol(symbol);
-        cells[row][column].setForeground(symbol.equals("X") ? Color.CYAN : Color.ORANGE);
+        cells[row][column].setForeground(symbol.equals("X") ? Color.CYAN : Color.MAGENTA);
     }
 
     @Override
@@ -60,16 +60,6 @@ public class SwingTicTacToe implements IGameObserver{
         gridPanel.setLayout(new GridLayout(rows, cols, 4, 4));
         gridPanel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
         gridPanel.setBackground(Color.BLACK);
-
-        // Double-click anywhere on the grid to reset
-        gridPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
-                    resetGame();
-                }
-            }
-        });
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
@@ -132,12 +122,22 @@ public class SwingTicTacToe implements IGameObserver{
     }
 
     public static void main(String[] args)  {
+        String[] boardSizes = {"3x3" , "4x4", "5x5"};
+        String sizeChoice = (String) JOptionPane.showInputDialog(null, "Select Board Size:",
+                "Setup", JOptionPane.QUESTION_MESSAGE, null, boardSizes, boardSizes[0]);
+        int size = Integer.parseInt(sizeChoice.substring(0, 1));
+
+        String[] difficulties = {"Simple", "Smart"};
+        String difficultyChoice = (String) JOptionPane.showInputDialog(null, "Select Computer Difficulty:",
+                "Setup", JOptionPane.QUESTION_MESSAGE, null, difficulties, difficulties[0]);
+
         PlayerFactory playerFactory = new PlayerFactory();
-        GameBoard board = new GameBoard();
+        GameBoard board = new GameBoard(size);
         Player playerOne = playerFactory.createHumanPlayer("Joe", "X");
-        Player playerTwo = playerFactory.createComputerPlayer("O");
+        Player playerTwo = playerFactory.createComputerPlayer("O", difficultyChoice);
+
         Tictactoe game = new Tictactoe(board, playerOne, playerTwo);
-        new SwingTicTacToe(game).show();
+        new SwingTicTacToe(game, size).show();
     }
 
 }

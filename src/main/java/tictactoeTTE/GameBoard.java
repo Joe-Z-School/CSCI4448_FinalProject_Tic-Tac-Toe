@@ -46,6 +46,22 @@ public class GameBoard {
         return new MoveResult(true, removedSymbol, removedRow, removedColumn);
     }
 
+    public int[] getOldestMove(Player player){
+        LinkedList<int[]> opponentHistory = (player.getSymbol().equals("X")) ? player1History : player2History;
+        if (opponentHistory.size() == boardSize){
+            return opponentHistory.peek();
+        }
+        return null;
+    }
+
+    public int[] getOpponentOldestMove(Player player){
+        LinkedList<int[]> opponentHistory = (player.getSymbol().equals("X")) ? player2History : player1History;
+        if (opponentHistory.size() == boardSize){
+            return opponentHistory.peek();
+        }
+        return null;
+    }
+
     public Boolean isValidSpot(int row, int column){
         if ( row < 0 || row >= MAX_ROWS || column < 0 || column >= MAX_COLUMNS){
             return false;

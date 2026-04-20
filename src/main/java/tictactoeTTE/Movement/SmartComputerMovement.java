@@ -10,17 +10,19 @@ public class SmartComputerMovement extends Movement {
     private final Random rand = new Random();
 
 
-    // Goal is to check for winning spot first, then check to block, lastly default to first available spot
+    // Goal is to check for winning spot first, then check to block, lastly default to random available spot
     public int[] getNextMove(GameBoard board, Player playerMoving) {
         String mySymbol = playerMoving.getSymbol();
         String opponentSymbol = mySymbol.equals("X") ? "O" : "X";
 
-        int[] winningChoice = findMove(board, mySymbol);
+        int[] myOldest = board.getOldestMove(playerMoving);
+        int[] winningChoice = findMove(board, mySymbol, myOldest);
         if (winningChoice != null) {
             return winningChoice;
         }
 
-        int[] blockingChoice = findMove(board, opponentSymbol);
+        int[] opponentOldest = board.getOpponentOldestMove(playerMoving);
+        int[] blockingChoice = findMove(board, opponentSymbol, opponentOldest);
         if (blockingChoice != null) {
             return blockingChoice;
         }
@@ -28,22 +30,38 @@ public class SmartComputerMovement extends Movement {
         return getAvailableMoves(board).get(rand.nextInt(getAvailableMoves(board).size()));
     }
 
-    private int[] findMove(GameBoard board, String symbol) {
+    private int[] findMove(GameBoard board, String symbol, int[] aboutToBeRemoved) {
         String[][] layoutOfBoard = board.getBoardLayout();
         int boardSize = layoutOfBoard.length;
         int targetCounter = boardSize - 1;
 
         int[] checkedRows = checkRows(boardSize, layoutOfBoard, symbol, targetCounter);
-        if (checkedRows != null) return checkedRows;
+        if (checkedRows != null) {
+            if (aboutToBeRemoved == null || aboutToBeRemoved[0] != checkedRows[0]) {
+                return checkedRows;
+            }
+        }
 
         int[] checkedColumns = checkColumns(boardSize, layoutOfBoard, symbol, targetCounter);
-        if (checkedColumns != null) return checkedColumns;
+        if (checkedColumns != null) {
+            if (aboutToBeRemoved == null || aboutToBeRemoved[1] != checkedColumns[1]) {
+                return checkedColumns;
+            }
+        }
 
         int[] checkedDiagLtoR = checkDiagLtoR(boardSize, layoutOfBoard, symbol, targetCounter);
-        if (checkedDiagLtoR != null) return checkedDiagLtoR;
+        if (checkedDiagLtoR != null) {
+            if (aboutToBeRemoved == null || aboutToBeRemoved[0] != aboutToBeRemoved[1]) {
+                return checkedDiagLtoR;
+            }
+        }
 
         int[] checkedDiagRtoL = checkDiagRtoL(boardSize, layoutOfBoard, symbol, targetCounter);
-        if (checkedDiagRtoL != null) return checkedDiagRtoL;
+        if (checkedDiagRtoL != null) {
+            if (aboutToBeRemoved == null || aboutToBeRemoved[0] + aboutToBeRemoved[1] != boardSize - 1) {
+                return checkedDiagRtoL;
+            }
+        }
 
         return null;
     }

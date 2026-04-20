@@ -3,7 +3,11 @@ package tictactoeTTE.Movement;
 import tictactoeTTE.GameBoard;
 import tictactoeTTE.Players.Player;
 
-public class AIMovement extends Movement {
+import java.util.Random;
+
+public class SmartComputerMovement extends Movement {
+
+    private final Random rand = new Random();
 
 
     // Goal is to check for winning spot first, then check to block, lastly default to first available spot
@@ -21,7 +25,7 @@ public class AIMovement extends Movement {
             return blockingChoice;
         }
 
-        return getAvailableMoves(board).getFirst();
+        return getAvailableMoves(board).get(rand.nextInt(getAvailableMoves(board).size()));
     }
 
     private int[] findMove(GameBoard board, String symbol) {

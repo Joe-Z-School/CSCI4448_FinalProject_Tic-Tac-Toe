@@ -122,6 +122,16 @@ public class SwingTicTacToe implements IGameObserver{
     }
 
     public static void main(String[] args)  {
+        String DEFAULT_PLAYER_ONE_SYMBOL = "X";
+        String DEFAULT_PLAYER_TWO_SYMBOL = "O";
+
+        String playerName = JOptionPane.showInputDialog(null, "Enter player name: ",
+                "Player Setup", JOptionPane.QUESTION_MESSAGE);
+
+        if (playerName == null || playerName.trim().isEmpty()) {
+            playerName = "Player 1";
+        }
+
         String[] boardSizes = {"3x3" , "4x4", "5x5"};
         String sizeChoice = (String) JOptionPane.showInputDialog(null, "Select Board Size:",
                 "Setup", JOptionPane.QUESTION_MESSAGE, null, boardSizes, boardSizes[0]);
@@ -133,8 +143,8 @@ public class SwingTicTacToe implements IGameObserver{
 
         PlayerFactory playerFactory = new PlayerFactory();
         GameBoard board = new GameBoard(size);
-        Player playerOne = playerFactory.createHumanPlayer("Joe", "X");
-        Player playerTwo = playerFactory.createComputerPlayer("O", difficultyChoice);
+        Player playerOne = playerFactory.createHumanPlayer(playerName, DEFAULT_PLAYER_ONE_SYMBOL);
+        Player playerTwo = playerFactory.createComputerPlayer(DEFAULT_PLAYER_TWO_SYMBOL, difficultyChoice);
 
         Tictactoe game = new Tictactoe(board, playerOne, playerTwo);
         new SwingTicTacToe(game, size).show();

@@ -21,7 +21,8 @@ class PlayerFactoryTest {
     void createComputerPlayerTest() {
         String expectedComputerName = "Computer";
         String compPlayerSymbol = "O";
-        Player computerPlayer = playerFactory.createComputerPlayer(compPlayerSymbol);
+        String computerDifficulty = "Simple";
+        Player computerPlayer = playerFactory.createComputerPlayer(compPlayerSymbol,computerDifficulty);
 
         assertEquals(expectedComputerName, computerPlayer.getPlayerName());
     }

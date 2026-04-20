@@ -18,14 +18,17 @@ class GameBoardTest {
 
     Player computerPlayer;
     String playerTwoSymbol = "O";
+    String computerDifficulty = "Simple";
+
+    int DEFAULT_BOARD_SIZE = 3;
 
 
     @BeforeEach
     void setUp() {
-        gameBoard = new GameBoard();
+        gameBoard = new GameBoard(DEFAULT_BOARD_SIZE);
         playerFactory = new PlayerFactory();
         humanPlayer = playerFactory.createHumanPlayer(humanPlayerName, playerOneSymbol);
-        computerPlayer = playerFactory.createComputerPlayer(playerTwoSymbol);
+        computerPlayer = playerFactory.createComputerPlayer(playerTwoSymbol,computerDifficulty);
     }
 
     @Test

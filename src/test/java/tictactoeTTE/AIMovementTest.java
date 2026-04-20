@@ -16,15 +16,17 @@ class AIMovementTest {
     String humanPlayerName = "Joe";
     String playerOneSymbol = "X";
     String playerTwoSymbol = "O";
+    String computerDifficulty = "Smart";
     Player computerPlayer;
     Player humanPlayer;
+    int DEFAULT_BOARD_SIZE = 3;
 
     @BeforeEach
     void setUp() {
-        gameBoard = new GameBoard();
+        gameBoard = new GameBoard(DEFAULT_BOARD_SIZE);
         playerFactory = new PlayerFactory();
         humanPlayer = playerFactory.createHumanPlayer(humanPlayerName, playerOneSymbol);
-        computerPlayer = playerFactory.createComputerPlayer(playerTwoSymbol);
+        computerPlayer = playerFactory.createComputerPlayer(playerTwoSymbol,computerDifficulty);
     }
 
     @Test
@@ -35,7 +37,9 @@ class AIMovementTest {
 
         gameBoard.displayBoard();
 
-        computerPlayer.takeTurn(gameBoard);
+        int[] moveChosen = computerPlayer.getMove(gameBoard);
+
+        gameBoard.doMovement(moveChosen[0], moveChosen[1], computerPlayer);
 
         gameBoard.displayBoard();
 
@@ -54,7 +58,9 @@ class AIMovementTest {
 
         gameBoard.displayBoard();
 
-        computerPlayer.takeTurn(gameBoard);
+        int[] moveChosen = computerPlayer.getMove(gameBoard);
+
+        gameBoard.doMovement(moveChosen[0], moveChosen[1], computerPlayer);
 
         gameBoard.displayBoard();
 
@@ -63,17 +69,5 @@ class AIMovementTest {
         assertEquals(computerPlayer.getSymbol(), boardLayout[2][2]);
 
     }
-
-    @Test
-    void computerPicksFirstEmptySpotTest(){
-        gameBoard.doMovement(1,1, humanPlayer);
-        gameBoard.displayBoard();
-
-        computerPlayer.takeTurn(gameBoard);
-        gameBoard.displayBoard();
-        String[][] boardLayout = gameBoard.getBoardLayout();
-        assertEquals(computerPlayer.getSymbol(), boardLayout[0][0]);
-    }
-
 
 }

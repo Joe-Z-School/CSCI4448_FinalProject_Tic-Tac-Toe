@@ -59,6 +59,8 @@ public class Tictactoe implements IGame{
         }
     }
 
+    public GameBoard getGameBoard() {return this.board;}
+
     public Boolean isOver(){ return gameIsOver; }
 
     private void switchTurn() {

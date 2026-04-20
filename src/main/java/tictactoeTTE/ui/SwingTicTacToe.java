@@ -7,13 +7,8 @@ import tictactoeTTE.Players.PlayerFactory;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 
 public class SwingTicTacToe implements IGameObserver{
@@ -24,15 +19,21 @@ public class SwingTicTacToe implements IGameObserver{
     private final GameBoardCell[][] cells;
 
     private final Tictactoe tictactoe;
+    private boolean turnBeingTaken = false;
+    private final boolean showHints;
+    private final Player player1;
+    private final Player player2;
 
     private final JFrame frame = new JFrame("Tic-Tac-Toe");
     private final JPanel gridPanel = new JPanel();
 
-    //private final JLabel[][] cells;
 
-    public SwingTicTacToe(Tictactoe game, int size) {
+    public SwingTicTacToe(Tictactoe game, int size, boolean showHints, Player player1, Player player2) {
         this.tictactoe = game;
         this.cells = new GameBoardCell[size][size];
+        this.showHints = showHints;
+        this.player1 = player1;
+        this.player2 = player2;
 
         this.tictactoe.registerObserver(this);
 
@@ -43,6 +44,24 @@ public class SwingTicTacToe implements IGameObserver{
     @Override
     public void moveMade(int row, int column, String symbol){
         cells[row][column].setSymbol(symbol);
+
+        for(GameBoardCell[] rowCells : cells){
+            for(GameBoardCell cell : rowCells){
+                cell.setFading(false);
+            }
+        }
+
+        if (this.showHints){
+            int[] nextX = tictactoe.getGameBoard().getOldestMove(player1);
+            int[] nextO = tictactoe.getGameBoard().getOldestMove(player2);
+
+            if (nextX != null) cells[nextX[0]][nextX[1]].setFading(true);
+            if (nextO != null) cells[nextO[0]][nextO[1]].setFading(true);
+        }
+
+        if (symbol.equals("O") || tictactoe.isOver()) {
+            turnBeingTaken = false;
+        }
         cells[row][column].setForeground(symbol.equals("X") ? Color.CYAN : Color.MAGENTA);
     }
 
@@ -75,7 +94,17 @@ public class SwingTicTacToe implements IGameObserver{
                 cell.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        tictactoe.handleMove(rowSelected, columnSelected);
+                        if (turnBeingTaken || tictactoe.isOver()) {
+                            return;
+                        }
+
+                        if (tictactoe.getGameBoard().isValidSpot(rowSelected, columnSelected)) {
+                            turnBeingTaken = true;
+                            tictactoe.handleMove(rowSelected, columnSelected);
+                        }
+                        else {
+                            System.out.println("Invalid spot selected");
+                        }
                     }
                 });
 
@@ -124,30 +153,74 @@ public class SwingTicTacToe implements IGameObserver{
     public static void main(String[] args)  {
         String DEFAULT_PLAYER_ONE_SYMBOL = "X";
         String DEFAULT_PLAYER_TWO_SYMBOL = "O";
+        String DEFAULT_PLAYER_NAME = "Player 1";
+        String DEFAULT_DIFFICULTY = "Simple";
 
-        String playerName = JOptionPane.showInputDialog(null, "Enter player name: ",
-                "Player Setup", JOptionPane.QUESTION_MESSAGE);
+        JTextField nameField = new JTextField("Joe");
+        JComboBox<String> sizeBox = new JComboBox<>(new String[]{"3x3", "4x4", "5x5"});
+        JComboBox<String> difficultyBox = new JComboBox<>(new String[]{"Simple", "Smart"});
+        JCheckBox showHints = new JCheckBox("Show removal hints", true);
 
-        if (playerName == null || playerName.trim().isEmpty()) {
-            playerName = "Player 1";
+        JPanel startPanel = createStartupPanel(nameField, sizeBox, difficultyBox, showHints);
+
+        int result = JOptionPane.showConfirmDialog(null, startPanel,
+                "Game Setup", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String playerName = nameField.getText().trim().isEmpty() ? DEFAULT_PLAYER_NAME : nameField.getText().trim();
+            int boardSize = Integer.parseInt(((String)sizeBox.getSelectedItem()).substring(0, 1));
+            String difficultyChoice = difficultyBox.getSelectedItem().toString().trim().isEmpty() ? DEFAULT_DIFFICULTY :  difficultyBox.getSelectedItem().toString();
+
+            PlayerFactory playerFactory = new PlayerFactory();
+            GameBoard board = new GameBoard(boardSize);
+            Player playerOne = playerFactory.createHumanPlayer(playerName, DEFAULT_PLAYER_ONE_SYMBOL);
+            Player playerTwo = playerFactory.createComputerPlayer(DEFAULT_PLAYER_TWO_SYMBOL, difficultyChoice);
+            boolean hintsEnabled = showHints.isSelected();
+
+            Tictactoe game = new Tictactoe(board, playerOne, playerTwo);
+            new SwingTicTacToe(game, boardSize,hintsEnabled, playerOne, playerTwo).show();
         }
 
-        String[] boardSizes = {"3x3" , "4x4", "5x5"};
-        String sizeChoice = (String) JOptionPane.showInputDialog(null, "Select Board Size:",
-                "Setup", JOptionPane.QUESTION_MESSAGE, null, boardSizes, boardSizes[0]);
-        int size = Integer.parseInt(sizeChoice.substring(0, 1));
+    }
 
-        String[] difficulties = {"Simple", "Smart"};
-        String difficultyChoice = (String) JOptionPane.showInputDialog(null, "Select Computer Difficulty:",
-                "Setup", JOptionPane.QUESTION_MESSAGE, null, difficulties, difficulties[0]);
+    private static JPanel createStartupPanel(JTextField nameField, JComboBox<String> sizeBox, JComboBox<String> difficultyBox, JCheckBox showHints) {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5); // Padding
 
-        PlayerFactory playerFactory = new PlayerFactory();
-        GameBoard board = new GameBoard(size);
-        Player playerOne = playerFactory.createHumanPlayer(playerName, DEFAULT_PLAYER_ONE_SYMBOL);
-        Player playerTwo = playerFactory.createComputerPlayer(DEFAULT_PLAYER_TWO_SYMBOL, difficultyChoice);
+        // Game Description
+        JLabel description = new JLabel("<html><div style='text-align: center;'>" +
+                "<h2>Tic-Tac-Toe: Till-The-End</h2>" +
+                "Each player only keeps their last 3 moves on the board.<br>" +
+                "When you place your 4th piece, the 1st one disappears!" +
+                "</div></html>");
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        panel.add(description, gbc);
 
-        Tictactoe game = new Tictactoe(board, playerOne, playerTwo);
-        new SwingTicTacToe(game, size).show();
+        // Name Input
+        gbc.gridwidth = 1; gbc.gridy = 1;
+        panel.add(new JLabel("Player Name:"), gbc);
+        gbc.gridx = 1;
+        panel.add(nameField, gbc);
+
+        // Board Size
+        gbc.gridx = 0; gbc.gridy = 2;
+        panel.add(new JLabel("Board Size:"), gbc);
+        gbc.gridx = 1;
+        panel.add(sizeBox, gbc);
+
+        // Difficulty
+        gbc.gridx = 0; gbc.gridy = 3;
+        panel.add(new JLabel("Computer Difficulty:"), gbc);
+        gbc.gridx = 1;
+        panel.add(difficultyBox, gbc);
+
+        // Hints
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
+        panel.add(showHints, gbc);
+
+        return panel;
     }
 
 }

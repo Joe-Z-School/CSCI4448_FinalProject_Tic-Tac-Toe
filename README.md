@@ -15,6 +15,9 @@ Final project for CSCI 4448 - Object-Oriented Analysis and Design with a Tic-Tac
     - The MVC pattern will be used to organize the game and help handle the game flow between the input gathered from the user to be updated onto the UI.
 
 
+## Method Coverage Screenshot
+![Tictactoe-Project_Method-Coverage-Screenshot_JoeZ.png](Tictactoe-Project_Method-Coverage-Screenshot_JoeZ.png)
+
 ## The project should:
 
     - You are graded on the code that you write

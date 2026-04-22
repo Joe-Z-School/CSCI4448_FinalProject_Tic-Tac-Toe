@@ -64,10 +64,18 @@ public class Tictactoe implements IGame{
     }
 
     @Override
-    public void registerObserver(IGameObserver observer) {observers.add(observer);}
+    public void registerObserver(IGameObserver observer) {
+        observers.add(observer);
+    }
 
     @Override
-    public void removeObserver(IGameObserver observer) {observers.remove(observer);}
+    public void removeObserver(IGameObserver observer) {
+        observers.remove(observer);
+    }
+
+    public List<IGameObserver> getObservers() {
+        return observers;
+    }
 
     @Override
     public void sendMoveSignal(int row, int column, Player player){

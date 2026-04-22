@@ -13,11 +13,6 @@ public class MoveResult {
         this.successfulMove = wasMoveSuccessful;
     }
 
-    public static MoveResult simpleMove(boolean successfulMove){
-        int noRemoveRowAndColumn = -1;
-        return new MoveResult(successfulMove, false,  noRemoveRowAndColumn, noRemoveRowAndColumn);
-    }
-
     public boolean wasSymbolRemoved(){
         return symbolRemoved;
     }

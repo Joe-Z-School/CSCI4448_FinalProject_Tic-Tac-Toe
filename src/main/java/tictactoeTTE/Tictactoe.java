@@ -26,35 +26,31 @@ public class Tictactoe implements IGame{
     public void handleMove(int row, int col) {
         if (gameIsOver) return;
 
-        if (!board.isValidSpot(row, col)) {
-            return;
-        }
-
         MoveResult resultOfMove = board.doMovement(row, col, currentPlayer);
+        if (resultOfMove.isSuccessfulMove()) {
+            if (resultOfMove.wasSymbolRemoved()) {
+                sendRemovalSignal(resultOfMove.getRemovedRow(), resultOfMove.getRemovedColumn());
+            }
 
-        if (resultOfMove.wasSymbolRemoved()){
-            sendRemovalSignal(resultOfMove.getRemovedRow(),  resultOfMove.getRemovedColumn());
-        }
+            sendMoveSignal(row, col, currentPlayer);
 
-        sendMoveSignal(row, col, currentPlayer);
+            if (board.checkIfWinner(currentPlayer)) {
+                gameIsOver = true;
+                sendGameOverSignal(currentPlayer);
+            } else {
+                switchTurn();
 
-        if (board.checkIfWinner(currentPlayer)){
-            gameIsOver = true;
-            sendGameOverSignal(currentPlayer);
-        }
-        else {
-            switchTurn();
+                if (currentPlayer.isComputer()) {
+                    int computerMoveDisplayDelay = 1500;
 
-            if(currentPlayer.isComputer()){
-                int computerMoveDisplayDelay = 1500;
+                    Timer computerDelayTimer = new Timer(computerMoveDisplayDelay, action -> {
+                        int[] computerMove = currentPlayer.getMove(board);
+                        handleMove(computerMove[0], computerMove[1]);
+                    });
 
-                Timer computerDelayTimer = new Timer(computerMoveDisplayDelay, action -> {
-                    int[] computerMove = currentPlayer.getMove(board);
-                    handleMove(computerMove[0], computerMove[1]);
-                });
-
-                computerDelayTimer.setRepeats(false);
-                computerDelayTimer.start();
+                    computerDelayTimer.setRepeats(false);
+                    computerDelayTimer.start();
+                }
             }
         }
     }

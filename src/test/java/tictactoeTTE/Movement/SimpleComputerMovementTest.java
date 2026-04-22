@@ -6,6 +6,9 @@ import tictactoeTTE.GameBoard;
 import tictactoeTTE.Players.Player;
 import tictactoeTTE.Players.PlayerFactory;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,8 +33,25 @@ public class SimpleComputerMovementTest {
     }
 
     @Test
-    void computerMovesRandomly(){
+    void computerAlwaysPicksAvailableCell(){
+        Movement movement = new SimpleComputerMovement();
 
+        gameBoard.doMovement(0,1,humanPlayer);
+        gameBoard.doMovement(0,2,computerPlayer);
+        gameBoard.doMovement(1,0,humanPlayer);
+        gameBoard.doMovement(1,1,computerPlayer);
+        gameBoard.doMovement(2,0,humanPlayer);
+        gameBoard.doMovement(2,1,computerPlayer);
+
+        gameBoard.displayBoard();
+
+        List<int[]> availableSlotsLeft = movement.getAvailableMoves(gameBoard);
+        int[] computerNextMove = computerPlayer.getMove(gameBoard);
+
+        boolean wasMoveAvailable = availableSlotsLeft.stream()
+                        .anyMatch(cell -> Arrays.equals(cell, computerNextMove));
+
+        assertTrue(wasMoveAvailable);
     }
 
 }

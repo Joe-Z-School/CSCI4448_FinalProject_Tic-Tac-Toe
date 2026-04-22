@@ -25,11 +25,15 @@ public class GameBoard {
 
     public MoveResult doMovement(int row, int column, Player player){
 
-        LinkedList<int[]> history = (player.getSymbol().equals("X")) ? player1History : player2History;
-
         boolean removedSymbol = false;
         int removedRow = -1;
         int removedColumn = -1;
+
+        if(!isValidSpot(row, column)){
+            return new MoveResult(false, removedSymbol, removedRow, removedColumn);
+        }
+
+        LinkedList<int[]> history = (player.getSymbol().equals("X")) ? player1History : player2History;
 
         if (history.size() == boardSize){
             int[] oldestSymbol = history.poll();

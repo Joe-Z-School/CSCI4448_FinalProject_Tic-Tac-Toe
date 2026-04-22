@@ -1,14 +1,15 @@
-package tictactoeTTE;
+package tictactoeTTE.Movement;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tictactoeTTE.GameBoard;
 import tictactoeTTE.Players.Player;
 import tictactoeTTE.Players.PlayerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class AIMovementTest {
+class SmartComputerMovementTest {
 
     GameBoard gameBoard;
     PlayerFactory playerFactory;

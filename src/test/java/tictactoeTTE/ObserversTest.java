@@ -1,46 +1,53 @@
 package tictactoeTTE;
 
 import org.junit.jupiter.api.Test;
+import tictactoeTTE.Players.Player;
+import tictactoeTTE.Players.PlayerFactory;
+import tictactoeTTE.ui.SwingTicTacToe;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ObserversTest {
+    PlayerFactory playerFactory = new PlayerFactory();
 
     @Test
-    void getMazeObserverViaSPI() {
-        List<IGameObserver> observers = new ArrayList<>();
+    void testRegisterObserver(){
+        int sizeOfBoard = 3;
+        int expectedCountOfObservers = 1;
+        GameBoard board = new GameBoard(sizeOfBoard);
+        Player player1 = playerFactory.createHumanPlayer("Joe", "X");
+        Player player2 = playerFactory.createComputerPlayer("O", "Simple");
+        Tictactoe game = new Tictactoe(board, player1, player2);
 
-//        Maze maze = Maze.getNewBuilder(new RoomFactory())
-//                .create2x2Grid()
-//                .build();
-//        ObservablePolymorphia polymorphia = new ObservablePolymorphia(maze);
-        IMutableServiceContext serviceContext = new SimpleServiceContext();
-//        serviceContext.register(IMazeSubject.class, polymorphia);
+        SwingTicTacToe gameUI = new SwingTicTacToe(game, sizeOfBoard, true, player1, player2);
 
-        ServiceLoader<IGameObserverProvider> loader = ServiceLoader.load(IGameObserverProvider.class);
-        Iterator<IGameObserverProvider> iterator = loader.iterator();
+        game.sendMoveSignal(0,0, player1);
 
-        while (iterator.hasNext()) {
-            IGameObserverProvider gameObserverProvider = iterator.next();
-            System.out.println("Found provider implementation: " + gameObserverProvider.getClass().getName());
-            assertNotNull(gameObserverProvider);
+        assertEquals(expectedCountOfObservers, game.getObservers().size());
 
-            try {
-                IGameObserver gameObserver = gameObserverProvider.create(serviceContext);
-                System.out.println("\tFound observer implementation: " + gameObserver.getClass().getName());
-                assertNotNull(gameObserver);
-                observers.add(gameObserver);
-            } catch (Exception e) {
-                System.out.println("\tError creating IGameObserver from provider " + gameObserverProvider.getClass().getName() + ": " + e.getMessage());
-            }
-        }
-        System.out.println("Found " + observers.size() + " observers");
-        System.out.println(observers);
-        assertTrue(observers.size() > 0);
     }
+
+    @Test
+    void testRemoveObserver(){
+        int sizeOfBoard = 3;
+        int expectedCountOfObservers = 0;
+        GameBoard board = new GameBoard(sizeOfBoard);
+        Player player1 = playerFactory.createHumanPlayer("Joe", "X");
+        Player player2 = playerFactory.createComputerPlayer("O", "Simple");
+        Tictactoe game = new Tictactoe(board, player1, player2);
+
+        SwingTicTacToe gameUI = new SwingTicTacToe(game, sizeOfBoard, true, player1, player2);
+
+        game.sendMoveSignal(0,0, player1);
+
+        game.removeObserver(gameUI);
+
+        assertEquals(expectedCountOfObservers, game.getObservers().size());
+
+    }
+
 }

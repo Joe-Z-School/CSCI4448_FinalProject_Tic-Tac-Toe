@@ -14,6 +14,6 @@ public class PlayerFactory {
 
     public Player createComputerPlayer(String symbol, String difficulty){
         Movement strategy = difficulty.equals("Smart") ? new SmartComputerMovement() : new SimpleComputerMovement();
-        return new Computer(COMPUTER_DEFAULT_NAME, symbol, strategy);
+        return new Computer(difficulty + " " + COMPUTER_DEFAULT_NAME, symbol, strategy);
     }
 }

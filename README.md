@@ -62,7 +62,7 @@ tie situation.
   - Notify = After each move, Tictactoe should call observer.sendMoveSignal(x, y, symbol) and every 4th symbol should call observer.sendRemoveSymbol(x,y)
   - Observer = SwingTicTacToe implementing IGameObserver and place/remove symbols when signals received. 
 * MVC layout:
-  - Model = GameBoard and Tictactoe
+  - Model = GameBoard
   - View = SwingTicTacToe
-  - Controller = GameController
+  - Controller = Tictactoe
 

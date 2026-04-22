@@ -3,6 +3,13 @@ package tictactoeTTE.ui;
 import javax.swing.*;
 import java.awt.*;
 
+/*
+This class was created using Generative AI to help with creating a UI that
+can dynamically change size and allow for the fading of symbols once
+a symbol has reached the point of being removed. No game logic resides
+in this class
+ */
+
 public class GameBoardCell extends JPanel {
     private String symbol = "";
     private boolean isFading = false;

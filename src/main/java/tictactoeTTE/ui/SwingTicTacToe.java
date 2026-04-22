@@ -75,6 +75,10 @@ public class SwingTicTacToe implements IGameObserver{
         JOptionPane.showMessageDialog(frame, "Winner: " + winner.getPlayerName());
     }
 
+    /*
+    buildUI was written with the help of Generative AI and the request to help create a UI that
+    accepts mouse clicks, changes colors, and adds a symbol to the cells via MVC pattern
+     */
     private void buildUi(int rows, int cols) {
         gridPanel.setLayout(new GridLayout(rows, cols, 4, 4));
         gridPanel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
@@ -123,11 +127,6 @@ public class SwingTicTacToe implements IGameObserver{
         frame.add(bottom, BorderLayout.SOUTH);
         frame.pack();
         frame.setLocationRelativeTo(null);
-    }
-
-    private void resetGame() {
-
-        redrawFromModel();
     }
 
     private void redrawFromModel() {
@@ -183,6 +182,12 @@ public class SwingTicTacToe implements IGameObserver{
 
     }
 
+    /*
+    Startup panel created using the help of Generative AI with the request to make a
+    swing panel that displays a text box containing a short description of the game,
+    an ability to select game board size from predetermined sizes, the ability to
+    select the difficulty of the computer player, and the ability to show hints or not.
+     */
     private static JPanel createStartupPanel(JTextField nameField, JComboBox<String> sizeBox, JComboBox<String> difficultyBox, JCheckBox showHints) {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
